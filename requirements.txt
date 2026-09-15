@@ -1,0 +1,2 @@
+# Installs the tradingagents package from this repository root (equivalent to "pip install .").
+.
