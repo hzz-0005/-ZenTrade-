@@ -38,6 +38,10 @@ dev = [
     "ruff>=0.15",
     "pytest>=8.0",
     "pytest-subtests>=0.13",
+    # The webapp test suite imports the API server and therefore needs the
+    # same runtime dependencies as a local webapp installation.
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
 ]
 # Amazon Bedrock support (AWS SigV4 auth + boto3). Optional so the core install
 # stays lean: pip install "tradingagents[bedrock]".
