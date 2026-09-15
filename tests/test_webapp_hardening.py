@@ -6,9 +6,9 @@ import pandas as pd
 import pytest
 from pydantic import ValidationError
 
+from webapp.config import WebappSettings
 from webapp.core.models import Decision, SessionSpec
 from webapp.core.portfolio import ExecutionModel, Portfolio
-from webapp.config import WebappSettings
 from webapp.engine.context_builder import DailyContext
 from webapp.engine.decision_agent import DecisionAgent
 from webapp.engine.financial_timing import assumed_publication_date

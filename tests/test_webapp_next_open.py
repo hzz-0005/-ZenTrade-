@@ -2,16 +2,17 @@ from __future__ import annotations
 
 import asyncio
 import json
-import pandas as pd
-import pytest
 import sqlite3
 
+import pandas as pd
+import pytest
+
+from webapp.config import WebappSettings
 from webapp.core.models import Decision
 from webapp.core.portfolio import ExecutionModel, Portfolio
-from webapp.config import WebappSettings
 from webapp.engine.backtest_engine import BacktestEngine
-from webapp.engine.data_gateway import DataGateway
 from webapp.engine.clock import reset_sim_date, set_sim_date
+from webapp.engine.data_gateway import DataGateway
 from webapp.server.routers import sessions
 from webapp.store import db
 

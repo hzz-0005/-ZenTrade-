@@ -262,7 +262,7 @@ class GraphDecisionAgent:
                     names = [c.get("name", "?") for c in calls]
                     ids = [c.get("id", "?") for c in calls]
                     logger.error("  [%d] AIMessage tool_calls=%s ids=%s", i, names, ids)
-                    pending.update({cid: "orphaned" for cid in ids})
+                    pending.update(dict.fromkeys(ids, "orphaned"))
                 else:
                     logger.error("  [%d] AIMessage (no tool calls)", i)
             elif role == "ToolMessage":
@@ -446,7 +446,7 @@ class GraphDecisionAgent:
         # buy level instead of coasting straight past it. The protective stop
         # still fires every day via the hard risk-control layer, so it does not
         # need to double as the band floor here.
-        if action == "buy" and entry and 0 < entry and close:
+        if action == "buy" and entry and entry > 0 and close:
             if entry < close:
                 lower = entry
             else:
@@ -454,7 +454,7 @@ class GraphDecisionAgent:
             if not (lower and upper and upper > lower > 0):
                 lower = close * (1 - self.settings.recheck_band_pct)
                 upper = close * (1 + self.settings.recheck_band_pct)
-        elif action == "hold" and entry and 0 < entry and close and view["weight"] <= 0.005:
+        elif action == "hold" and entry and entry > 0 and close and view["weight"] <= 0.005:
             # Flat + hold (watching for re-entry): the trader's entry is the
             # re-entry level. Anchor the band's lower edge to it so a pullback
             # down to it forces a re-decision — otherwise the engine coasts
@@ -976,7 +976,7 @@ def _levels_view(rating: str, close: float | None, entry, stop, target, take_pro
     if take_profit and bullish and take_profit > close:
         parts.append(f"止盈位 {take_profit:g}")
 
-    if stop and 0 < stop:
+    if stop and stop > 0:
         if stop < close:
             # Below the close: bullish = protect the position, bearish =
             # the trader's own "跌破则进一步减" trigger (300308: 跌破565-575).
@@ -988,7 +988,7 @@ def _levels_view(rating: str, close: float | None, entry, stop, target, take_pro
             # the reduce-thesis is wrong once price reclaims this level.
             parts.append(f"观点失效位 {stop:g}")
 
-    if entry and 0 < entry:
+    if entry and entry > 0:
         if bullish:
             if entry < close * 1.02:
                 parts.append(f"入场参考 {entry:g}")

@@ -1,6 +1,7 @@
 import logging
 import re
 
+from . import data_cache
 from .akshare import (
     get_balance_sheet as get_akshare_balance_sheet,
     get_cashflow as get_akshare_cashflow,
@@ -21,7 +22,6 @@ from .alpha_vantage import (
     get_news as get_alpha_vantage_news,
     get_stock as get_alpha_vantage_stock,
 )
-from . import data_cache
 from .config import get_config
 from .errors import (
     NoMarketDataError,

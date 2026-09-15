@@ -27,7 +27,6 @@ from tradingagents.dataflows.config import get_config
 from .analyst_execution import build_analyst_execution_plan
 from .conditional_logic import ConditionalLogic
 
-
 # Analyst report -> state key, for the report-cap wrapper below.
 _REPORT_KEYS = {
     "market": "market_report",

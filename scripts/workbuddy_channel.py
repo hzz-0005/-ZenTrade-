@@ -130,20 +130,20 @@ def run(ticker, start, end, init_cash, decisions):
     ledger = []
     for k, info in enumerate(ind):
         d, px = info["date"], info["close"]
-        act, pct, reason = "", 0.0, ""
+        act, reason = "", ""
         dec = decisions.get(d)
         if k == 0:  # 首日强制满仓(引擎规则)
             n = acct.buy(px, 1.0)
-            act, pct = f"BUY {n}", 1.0
+            act = f"BUY {n}"
             reason = "首日强制满仓(引擎规则)"
         elif dec:
             kind = dec[0]
             if kind == "buy":
                 n = acct.buy(px, dec[1])
-                act, pct = f"BUY {n}", dec[1]
+                act = f"BUY {n}"
             else:
                 n = acct.sell(px, dec[1])
-                act, pct = f"SELL {n}", dec[1]
+                act = f"SELL {n}"
             reason = dec[2]
         else:
             act = "HOLD(空仓观望)" if acct.shares == 0 else "HOLD(持仓)"
@@ -155,7 +155,7 @@ def run(ticker, start, end, init_cash, decisions):
     # 输出
     print(f"\n== WorkBuddy 决策通道 · {ticker}  {start}~{end} ==  数据源: {path}")
     print(f"{'日期':<11}{'收盘':>7}{'涨跌%':>7}  {'动作':<12}{'理由':<40}{'现金':>11}{'股数':>8}{'仓位%':>7}{'总资产':>12}")
-    for d, px, act, reason, c, sh, cb, pos, eq in ledger:
+    for d, px, act, reason, c, sh, _cb, pos, eq in ledger:
         chg = next(x["chg"] for x in ind if x["date"] == d)
         print(f"{d:<11}{px:>7.2f}{chg:>7.2f}  {act:<12}{reason:<40}{c:>11.0f}{int(sh):>8}{pos:>7.1f}{eq:>12.0f}")
 

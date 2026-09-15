@@ -22,7 +22,6 @@ Usage:
 from __future__ import annotations
 
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -33,7 +32,6 @@ from webapp.config import WebappSettings  # noqa: E402
 from webapp.core.models import Decision, Fill  # noqa: E402
 from webapp.core.portfolio import ExecutionModel, Portfolio  # noqa: E402
 from webapp.engine.context_builder import DailyContext  # noqa: E402
-from webapp.engine.news_gate import detect_technical_breakdown, detect_technical_improvement  # noqa: E402
 from webapp.engine.graph_agent import GraphDecisionAgent, _last_close  # noqa: E402
 from webapp.skills.library import SkillLibrary  # noqa: E402
 
@@ -220,12 +218,12 @@ def check_risk_stops(st: dict, day_index: int, trade_date: str, close_t: float,
                 reason=f"回撤熔断：权益自峰值回撤 {dd:.1%}（超过上限 {MAX_DD_STOP:.0%}），"
                        f"强制降至目标仓位 {DD_REDUCE_TO:.0%}",
                 sell_pct=sell_to_target(close_t, portfolio, DD_REDUCE_TO))
-    if stop_loss and 0 < stop_loss and close_t <= stop_loss:
+    if stop_loss and stop_loss > 0 and close_t <= stop_loss:
         source = "兜底" if stop_is_fallback else ""
         return exec_risk_sell(st, day_index, trade_date, close_t, portfolio, em,
             reason=f"止损触发（{source or '模型'}）：收盘 {close_t:g} 跌破止损位 {stop_loss:g}，清仓离场",
             sell_pct=1.0)
-    if take_profit and 0 < take_profit and close_t >= take_profit:
+    if take_profit and take_profit > 0 and close_t >= take_profit:
         return exec_risk_sell(st, day_index, trade_date, close_t, portfolio, em,
             reason=f"止盈触发：收盘 {close_t:g} 触及止盈位 {take_profit:g}，兑现一半锁定利润",
             sell_pct=0.5)
@@ -238,7 +236,6 @@ def check_risk_stops(st: dict, day_index: int, trade_date: str, close_t: float,
 # ---------------------------------------------------------------------------
 def build_ctx(day: dict, st: dict, days: list[dict], news_delta: list[dict],
               prev_coast: dict | None, extra_flags: list[str]) -> DailyContext:
-    import pandas as pd
     tail = day["tail"]
     lines = ["Date,Open,High,Low,Close,Volume"]
     for d, c, v in tail:

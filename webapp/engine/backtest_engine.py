@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 import pandas as pd
 
 from webapp.config import WebappSettings
-from webapp.core.errors import DataUnavailable, InvalidDecision, LLMBudgetExceeded
+from webapp.core.errors import DataUnavailable, InvalidDecision
 from webapp.core.models import Decision, Fill
 from webapp.core.portfolio import ExecutionModel, Portfolio
 from webapp.engine.clock import reset_sim_date, set_sim_date
@@ -971,7 +971,7 @@ class BacktestEngine:
                 )
 
         # 2) Stop-loss (full exit for a long book).
-        if stop_loss and 0 < stop_loss and close_t <= stop_loss:
+        if stop_loss and stop_loss > 0 and close_t <= stop_loss:
             source = "兜底" if stop_is_fallback else ""
             return self._exec_risk_sell(
                 day_index, trade_date, execution_date, execution_timing,
@@ -981,7 +981,7 @@ class BacktestEngine:
             )
 
         # 3) Take-profit (bank half on reaching the first target).
-        if take_profit and 0 < take_profit and close_t >= take_profit:
+        if take_profit and take_profit > 0 and close_t >= take_profit:
             return self._exec_risk_sell(
                 day_index, trade_date, execution_date, execution_timing,
                 close_t, gw, portfolio, exec_model,

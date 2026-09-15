@@ -14,10 +14,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+import tradingagents.graph.trading_graph as tg  # noqa: E402
 from webapp.config import WebappSettings  # noqa: E402
 from webapp.engine.context_builder import DailyContext  # noqa: E402
 from webapp.engine.graph_agent import GraphDecisionAgent, _size_position  # noqa: E402
-import tradingagents.graph.trading_graph as tg  # noqa: E402
 
 TAIL = "\n".join(
     f"2026-06-{d:02d},100.0,102.0,99.0,{100 + i},1000" for i, d in enumerate(range(10, 30))

@@ -118,11 +118,11 @@ class DecisionAgent:
                 decision.take_profit = None
                 flags.append("decision: 止盈价不高于现价，已丢弃")
             lower, upper = decision.recheck_lower, decision.recheck_upper
-            if lower is not None or upper is not None:
-                if not (lower and upper and 0 < lower <= close <= upper):
-                    decision.recheck_lower = None
-                    decision.recheck_upper = None
-                    flags.append("decision: 复查区间未包含现价，改用引擎默认区间")
+            if ((lower is not None or upper is not None)
+                    and not (lower and upper and lower > 0 and lower <= close <= upper)):
+                decision.recheck_lower = None
+                decision.recheck_upper = None
+                flags.append("decision: 复查区间未包含现价，改用引擎默认区间")
 
         apply_market_trade_guard(decision, ctx, flags)
 

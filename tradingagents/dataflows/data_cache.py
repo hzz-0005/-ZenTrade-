@@ -122,15 +122,13 @@ def _flush() -> None:
 
 def is_cacheable(method: str, args: tuple) -> bool:
     """Whether ``method``'s result can be cached for these args."""
-    if method in UNCACHEABLE_METHODS:
-        return False
     # A ticker's fundamentals snapshot (Ticker.info) has no date arg and is a
     # "current" snapshot — caching it is fine within a run (it is cheap to
     # re-derive later), but it is *not* date-stable across a historical
     # backtest. We still cache it: same ticker, same process == same snapshot,
     # which avoids N repeated info() calls. Cross-day staleness is irrelevant
     # because the info snapshot is already "today" regardless of sim date.
-    return True
+    return method not in UNCACHEABLE_METHODS
 
 
 def get(method: str, args: tuple, kwargs: dict, namespace: str = "") -> Any | None:

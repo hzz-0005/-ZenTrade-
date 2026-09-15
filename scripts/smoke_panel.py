@@ -19,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from webapp.config import WebappSettings, load_settings  # noqa: E402
-from webapp.core.models import Decision  # noqa: E402
 from webapp.engine.backtest_engine import BacktestEngine  # noqa: E402
 from webapp.engine.decision_agent import DecisionAgent  # noqa: E402
 from webapp.skills.library import SkillLibrary  # noqa: E402

@@ -170,6 +170,7 @@ gw_frame._price_frame = pd.DataFrame({
 eng2 = BacktestEngine("s2", WebappSettings(), decision_agent=FakeAgent(), skill_library=None)
 pf2 = Portfolio(cash=100000.0)
 from webapp.engine.clock import reset_sim_date, set_sim_date  # noqa: E402
+
 _token = set_sim_date("2026-01-05")  # mirror the loop: close_on() is clock-guarded
 try:
     eng2._force_initial_buy(0, "2026-01-05", gw_frame, pf2, exec_model)
@@ -193,7 +194,11 @@ check("8 空仓卖出降级为 no-op hold", fill_flat.action == "hold"
       and fill_flat.reason.startswith("sell ignored"), fill_flat.reason)
 
 # ---- 9) stance-aware price-level labels (graph_agent) ----
-from webapp.engine.graph_agent import _first_meaningful_sentence, _key_signals, _levels_view  # noqa: E402
+from webapp.engine.graph_agent import (  # noqa: E402
+    _first_meaningful_sentence,
+    _key_signals,
+    _levels_view,
+)
 
 # 9a bearish rating (the 300308 d1 case): PM target 535 / trader stop 570
 #    below a ~589 close are a downside objective and a further-reduce trigger
@@ -315,6 +320,7 @@ check("11 操作画像点名坏习惯",
 
 # 11b idle-cash nudge: soft, non-prescriptive
 from webapp.engine.backtest_engine import _cash_idle_note  # noqa: E402
+
 note_hit = _cash_idle_note(0.52, 8)
 check("11b 现金闲置提醒", note_hit is not None and "部署计划" in note_hit, str(note_hit))
 check("11c 不误报正常情形", _cash_idle_note(0.2, 8) is None and _cash_idle_note(0.5, 3) is None)

@@ -7,7 +7,7 @@ recorded rejection instead of a crash or a fabricated trade.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from webapp.core.errors import InvalidDecision
 from webapp.core.models import Decision, Fill

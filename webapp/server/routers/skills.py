@@ -6,7 +6,6 @@ from fastapi import APIRouter, HTTPException, Query
 from webapp.config import load_settings
 from webapp.server.schemas import CreateSkillRequest, UpdateSkillRequest
 from webapp.skills.library import SkillLibrary
-from webapp.store import db
 
 router = APIRouter(prefix="/api/skills", tags=["skills"])
 _library: SkillLibrary | None = None

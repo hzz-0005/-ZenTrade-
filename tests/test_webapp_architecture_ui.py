@@ -1,7 +1,7 @@
 import json
+import subprocess
 from html.parser import HTMLParser
 from pathlib import Path
-import subprocess
 
 
 def _frontend_exports() -> dict:

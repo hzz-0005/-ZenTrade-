@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Generate the WorkBuddy 9-node pipeline response for day46 (2026-07-14)."""
 import json
 from pathlib import Path

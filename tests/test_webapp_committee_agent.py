@@ -4,7 +4,6 @@ from types import SimpleNamespace
 import pytest
 
 from webapp.config import WebappSettings
-from webapp.core.models import Decision
 from webapp.engine.committee_agent import CommitteeDecisionAgent
 from webapp.engine.context_builder import DailyContext
 

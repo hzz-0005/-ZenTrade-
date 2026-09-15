@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import logging
 import os
+from contextlib import suppress
 from datetime import datetime
 
 import pandas as pd
@@ -220,10 +221,8 @@ def get_fundamentals(ticker, curr_date=None):
                 continue
             v = latest[col]
             if label == "报告期":
-                try:
+                with suppress(Exception):
                     v = pd.to_datetime(v).date()
-                except Exception:
-                    pass
             else:
                 v = _num(v)
                 if v is not None:

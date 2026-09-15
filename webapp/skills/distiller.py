@@ -253,7 +253,6 @@ class Distiller:
         candidates = review.candidate_skills[:6]
         if not candidates:
             return []
-        from webapp.prompts import loader
 
         created: list[dict] = []
         # One cross-category dedupe batch. The previous per-category loop could
@@ -273,7 +272,7 @@ class Distiller:
             date.fromisoformat(session["end_date"]) + timedelta(days=1)
         ).isoformat()
 
-        for c, v in zip(candidates, verdicts):
+        for c, v in zip(candidates, verdicts, strict=True):
             verdict = str(v.get("verdict", "new"))
             if verdict.startswith("duplicate:"):
                 continue

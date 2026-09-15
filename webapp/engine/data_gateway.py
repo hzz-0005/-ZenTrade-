@@ -17,9 +17,9 @@ import logging
 import pandas as pd
 
 from webapp.core.errors import DataUnavailable
-from webapp.engine.vendors import cn_source, us_source
 from webapp.engine.clock import get_sim_date
 from webapp.engine.market_profile import enrich_fundamentals
+from webapp.engine.vendors import cn_source, us_source
 
 logger = logging.getLogger(__name__)
 
@@ -550,7 +550,8 @@ class DataGateway:
                 flags.append("benchmark: unavailable")
                 return None, flags
             return ", ".join(
-                f"{d.strftime('%m-%d')}:{c:.2f}" for d, c in zip(tail["Date"], tail["Close"])
+                f"{d.strftime('%m-%d')}:{c:.2f}"
+                for d, c in zip(tail["Date"], tail["Close"], strict=True)
             ), flags
         except Exception as exc:
             flags.append(f"benchmark: unavailable ({type(exc).__name__})")

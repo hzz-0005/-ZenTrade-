@@ -213,14 +213,14 @@ def detect_technical_breakdown(close: float | None, indicators: dict | None,
         prev_boll_lb = prev_sma20 - 2 * (variance ** 0.5)
 
     sma20 = ind.get("close_20_sma")
-    if sma20 and close is not None and close < sma20:
-        if prev_close is None or prev_sma20 is None or prev_close >= prev_sma20:
-            reasons.append(f"跌破 20 日线（{close:g} < {sma20:g}）")
+    if (sma20 and close is not None and close < sma20
+            and (prev_close is None or prev_sma20 is None or prev_close >= prev_sma20)):
+        reasons.append(f"跌破 20 日线（{close:g} < {sma20:g}）")
 
     boll_lb = ind.get("boll_lb")
-    if boll_lb and close is not None and close < boll_lb:
-        if prev_close is None or prev_boll_lb is None or prev_close >= prev_boll_lb:
-            reasons.append(f"跌破布林下轨（{boll_lb:g}）")
+    if (boll_lb and close is not None and close < boll_lb
+            and (prev_close is None or prev_boll_lb is None or prev_close >= prev_boll_lb)):
+        reasons.append(f"跌破布林下轨（{boll_lb:g}）")
 
     return "；".join(reasons) if reasons else None
 
@@ -274,8 +274,8 @@ def detect_technical_improvement(close: float | None, indicators: dict | None,
         window = closes[-21:-1]  # the 20 closes ending at the previous day
         prev_sma20 = sum(window) / len(window)
     sma20 = ind.get("close_20_sma")
-    if sma20 and close is not None and close >= sma20:
-        if prev_close is not None and prev_sma20 is not None and prev_close < prev_sma20:
-            reasons.append(f"站回 20 日线（{close:g} ≥ {sma20:g}）")
+    if (sma20 and close is not None and close >= sma20
+            and prev_close is not None and prev_sma20 is not None and prev_close < prev_sma20):
+        reasons.append(f"站回 20 日线（{close:g} ≥ {sma20:g}）")
 
     return "；".join(reasons) if reasons else None
